@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 /* DB connection */
 const DB_URL = require('./config/keys').mongoURI;
-mongoose.connect(DB_URL)
+mongoose.connect(DB_URL, { useNewUrlParser: true })
   .then(() => console.log('MongoDB running...'))
   .catch((e) => console.log(e));
 
