@@ -38,9 +38,13 @@ router.post('/register', (req, res) => {
         avatar,
         password: req.body.password
       });
+
+      newUser.save()
+        .then((user) => res.json(user))
+        .catch((e) => console.log(e));
     })
     .catch((e) => {
-      res.status(500).json({ error: e });
+      console.log(e);
     });
 });
 
