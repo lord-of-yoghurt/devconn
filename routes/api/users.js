@@ -2,6 +2,7 @@ const express = require('express'),
       router = express.Router();
 
 const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
 
 // Load User model
 const User = require('../../models/User');
@@ -47,5 +48,33 @@ router.post('/register', (req, res) => {
       console.log(e);
     });
 });
+
+// @route   GET /api/users/login
+// @desc    Login user / Assign JWT token
+// @access  public
+router.post('/login', (req, res) => {
+  const email    = req.body.email,
+        password = req.body.password;
+
+  // Find user by email
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) return res.status(404).json({
+        error: 'User not found!'
+      });
+
+      // Check password
+      bcrypt.compare(password, user.password)
+        .then((isMatch) => {
+          if (!isMatch) return res.status(400).json({
+            error: 'The password is incorrect!'
+          });
+
+          res.json({ message: 'Yay!' });
+        })
+        .catch((e) => console.log(e));
+    })
+});
+
 
 module.exports = router;
