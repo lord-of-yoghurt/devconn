@@ -82,7 +82,7 @@ router.post('/login', (req, res) => {
           };
 
           jwt.sign(payload, keys.jwtSecret, {
-            expiresIn: 86400 // seconds
+            expiresIn: 86400 // seconds - 1 day
           }, (err, token) => {
             if (err) return console.log(err);
 
@@ -93,7 +93,7 @@ router.post('/login', (req, res) => {
           });
         })
         .catch((e) => console.log(e));
-    })
+    });
 });
 
 
