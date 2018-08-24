@@ -3,6 +3,9 @@ const express = require('express'),
 
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const keys = require('../../config/keys');
 
 // Load User model
 const User = require('../../models/User');
@@ -69,8 +72,25 @@ router.post('/login', (req, res) => {
           if (!isMatch) return res.status(400).json({
             error: 'The password is incorrect!'
           });
+          
+          // User matched - sign token
+          // The payload is needed to identify user later on
+          const payload = {
+            id: user.id,
+            name: user.name,
+            avatar: user.avatar
+          };
 
-          res.json({ message: 'Yay!' });
+          jwt.sign(payload, keys.jwtSecret, {
+            expiresIn: 86400 // seconds
+          }, (err, token) => {
+            if (err) return console.log(err);
+
+            res.json({
+              message: 'Token successfully assigned!',
+              token: `Bearer ${token}`
+            });
+          });
         })
         .catch((e) => console.log(e));
     })
