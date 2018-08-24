@@ -11,6 +11,9 @@ const keys = require('../../config/keys');
 // Load User model
 const User = require('../../models/User');
 
+// Load input validation
+const validateRegisterInput = require('../../validations/register');
+
 // IMPORTANT: the `/api/users` part is added in index.js,
 // where we call `app.use` and feed it the imported routes
 
@@ -25,6 +28,11 @@ router.get('/test', (req, res) => {
 // @desc    Register new user
 // @access  public
 router.post('/register', (req, res) => {
+  // run server-side validations
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) return res.status(400).json(errors);
+
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (user) return res.status(400).json({
