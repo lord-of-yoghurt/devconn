@@ -13,6 +13,7 @@ const User = require('../../models/User');
 
 // Load input validation
 const validateRegisterInput = require('../../validations/register');
+const validateLoginInput = require('../../validations/login');
 
 // IMPORTANT: the `/api/users` part is added in index.js,
 // where we call `app.use` and feed it the imported routes
@@ -66,22 +67,29 @@ router.post('/register', (req, res) => {
 // @desc    Login user / Assign JWT token
 // @access  public
 router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) return res.status(400).json(errors);
+
   const email    = req.body.email,
         password = req.body.password;
 
   // Find user by email
   User.findOne({ email })
     .then((user) => {
-      if (!user) return res.status(404).json({
-        error: 'User not found!'
-      });
+      if (!user) {
+        errors.email = 'User not found!';
+
+        return res.status(404).send(errors);
+      }
 
       // Check password
       bcrypt.compare(password, user.password)
         .then((isMatch) => {
-          if (!isMatch) return res.status(400).json({
-            error: 'The password is incorrect!'
-          });
+          if (!isMatch) {
+            errors.password = 'Incorrect email or password';
+            return res.status(400).send(errors);
+          }
           
           // User matched - sign token
           // The payload is needed to identify user later on
@@ -119,7 +127,6 @@ router.get(
       email: req.user.email
     });
   }
-)
-
+);
 
 module.exports = router;
