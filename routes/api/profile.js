@@ -44,25 +44,47 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     // Get the fields that need further processing
-    const { 
-      skills, 
-      youtube, 
-      twitter, 
-      facebook, 
-      linkedin, 
-      instagram 
-    } = req.body;
+    const user = req.user.id, 
+      { skills, youtube, twitter, facebook, linkedin, instagram } = req.body;
 
     // this is all of the fields
     const profileFields = {
       // first, spread the req.body object...
       ...req.body,
       // then, add the user reference...
-      user: req.user.id,
+      user,
       // then, overwrite skills and social properly
       skills: skills.split(','),
       social: { youtube, twitter, facebook, linkedin, instagram }
     };
+
+    Profile.findOne({ user })
+      .then((profile) => {
+        // if the profile exists, this is an update!
+        if (profile) {
+          Profile.findOneAndUpdate(
+            { user },
+            { $set: profileFields },
+            { new: true }
+          )
+            .then((profile) => res.json(profile));
+        } else {
+          // otherwise, create a new profile
+          Profile.findOne({ handle: profileFields.handle })
+            .then((profile) => {
+              // handles must be unique
+              if (profile) {
+                errors.handle = 'This handle already exists';
+                return res.status(400).json(errors);
+              }
+              // if all is good, save the profile
+              const newProfile = new Profile(profileFields);
+              newProfile.save()
+                .then((savedProfile) => res.json(savedProfile))
+                .catch((e) => console.log(e));
+            })
+        }
+      })
   }
 );
 
