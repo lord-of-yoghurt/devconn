@@ -2,21 +2,21 @@ const Validator = require('validator');
 
 const isEmpty = require('./is-empty');
 
-module.exports = (data) => {
+module.exports = ({ email, password }) => {
   let errors = {};
 
-  data.email = !isEmpty(data.email) ? data.email : '';
-  data.password = !isEmpty(data.password) ? data.password : '';
+  email = !isEmpty(email) ? email : '';
+  password = !isEmpty(password) ? password : '';
 
-  if (!Validator.isEmail(data.email)) {
+  if (!Validator.isEmail(email)) {
     errors.email = 'Invalid email address';
   }
 
-  if (Validator.isEmpty(data.email)) {
+  if (Validator.isEmpty(email)) {
     errors.email = 'Email cannot be empty';
   }
 
-  if (Validator.isEmpty(data.password)) {
+  if (Validator.isEmpty(password)) {
     errors.password = 'Password cannot be empty';
   }
 
