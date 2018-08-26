@@ -3,9 +3,8 @@ const Validator = require('validator');
 const isEmpty = require('./is-empty');
 
 module.exports = (data) => {
-  let errors = {};
-
-  const { 
+  let errors = {},
+  { 
     handle, 
     status, 
     skills, 

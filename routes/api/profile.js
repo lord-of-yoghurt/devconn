@@ -8,6 +8,9 @@ const passport = require('passport');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
+// load validation
+const validateProfileInput = require('../../validations/profile');
+
 // @route   GET /api/profile/test
 // @desc    test profile route
 // @access  public
@@ -22,8 +25,6 @@ router.get(
   '/', 
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const errors = {};
-
     Profile.findOne({ user: req.user.id })
       .then((profile) => {
         if (!profile) {
@@ -43,6 +44,9 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateProfileInput(req.body);
+
+    if (!isValid) return res.status(400).json(errors);
     // Get the fields that need further processing
     const user = req.user.id, 
       { skills, youtube, twitter, facebook, linkedin, instagram } = req.body;
@@ -82,9 +86,9 @@ router.post(
               newProfile.save()
                 .then((savedProfile) => res.json(savedProfile))
                 .catch((e) => console.log(e));
-            })
+            });
         }
-      })
+      });
   }
 );
 
