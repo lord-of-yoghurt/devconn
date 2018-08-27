@@ -26,6 +26,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Profile.findOne({ user: req.user.id })
+      .populate('user', ['name', 'avatar'])
       .then((profile) => {
         if (!profile) {
           errors.noProfile = 'Can\'t find a profile for this user!';
@@ -59,6 +60,8 @@ router.post(
       user,
       // then, overwrite skills and social properly
       skills: skills.split(','),
+      // WARNING: null values will be assigned if no link is provided.
+      // check if this is a problem in the future
       social: { youtube, twitter, facebook, linkedin, instagram }
     };
 
