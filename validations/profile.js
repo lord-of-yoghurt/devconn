@@ -21,9 +21,9 @@ module.exports = (data) => {
   status = !isEmpty(status) ? status : '';
   skills = !isEmpty(skills) ? skills : '';
 
-  if (!Validator.isLength(handle), { min: 2, max: 40 }) {
-    errors.handle = 'Handle length must be between 2 and 40 characters';
-  }
+  // if (!Validator.isLength(handle), { min: 2, max: 40 }) {
+  //   errors.handle = 'Handle length must be between 2 and 40 characters';
+  // }
 
   if (Validator.isEmpty(handle)) {
     errors.handle = 'Handle is required';
