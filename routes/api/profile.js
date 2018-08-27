@@ -59,6 +59,25 @@ router.get('/handle/:handle', (req, res) => {
     .catch((e) => res.status(404).json(e));
 });
 
+// @route   GET /api/profile/user/:id
+// @desc    fetch a user's profile by id
+// @access  public
+router.get('/user/:id', (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.params.id })
+    .populate('user', ['name', 'avatar'])
+    .then((profile) => {
+      if (!profile) {
+        errors.noProfile = 'This profile does not exist';
+        return res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch((e) => res.status(404).json(e));
+});
+
 // @route   POST /api/profile
 // @desc    receive user's profile data and create/edit profile
 // @access  private
