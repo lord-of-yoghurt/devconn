@@ -99,7 +99,9 @@ router.post(
       // then, add the user reference...
       user,
       // then, overwrite skills and social properly
-      skills: skills.split(','),
+      skills: skills
+        .split(',')
+        .map((skill) => skill.trim()),
       // WARNING: null values will be assigned if no link is provided.
       // check if this is a problem in the future
       social: { youtube, twitter, facebook, linkedin, instagram }
