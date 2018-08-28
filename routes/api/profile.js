@@ -40,6 +40,24 @@ router.get(
   }
 );
 
+// @route   GET /api/profile/all
+// @desc    fetch all users' profiles
+// @access  public
+router.get('/all', (req, res) => {
+  const errors = {};
+
+  Profile.find()
+    .populate('user', ['name', 'avatar'])
+    .then((profiles) => {
+      if (!profiles) {
+        errors.noProfiles = 'Could not fetch profiles.';
+        return res.status(404).json(errors);
+      }
+      res.json(profiles);
+    })
+    .catch((e) => res.status(404).json(e));
+});
+
 // @route   GET /api/profile/handle/:handle
 // @desc    fetch a user's profile by handle
 // @access  public
