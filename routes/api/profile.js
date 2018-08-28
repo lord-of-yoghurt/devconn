@@ -158,4 +158,23 @@ router.post(
   }
 );
 
+// @route   POST /api/profile/experience
+// @desc    fill out 'Experience' in the profile
+// @access  private
+router.post(
+  '/experience',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        profile.experience.unshift(req.body);
+
+        profile.save()
+          .then((profile) => res.json(profile))
+          .catch((e) => res.status(400).json(e));
+      })
+      .catch((e) => res.status(400).json(e));
+  }
+);
+
 module.exports = router;
