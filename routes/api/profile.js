@@ -75,7 +75,10 @@ router.get('/user/:id', (req, res) => {
 
       res.json(profile);
     })
-    .catch((e) => res.status(404).json(e));
+    .catch((e) => {
+      errors.databaseError = 'This profile does not exist';
+      return res.status(404).json(errors);
+    });
 });
 
 // @route   POST /api/profile
