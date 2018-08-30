@@ -228,4 +228,26 @@ router.delete(
   }
 );
 
+// @route   DELETE /api/profile/education/:id
+// @desc    Delete education from user's profile
+// @access  private
+router.delete(
+  '/education/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        if (!profile) return res.status(404).json({
+          error: 'Profile not found!'
+        });
+
+        profile.education = profile.education
+          .filter((item) => item.id !== req.params.id);
+
+        profile.save().then((saved) => res.json(saved));
+      })
+      .catch((e) => res.status(400).json(e));
+  }
+);
+
 module.exports = router;
