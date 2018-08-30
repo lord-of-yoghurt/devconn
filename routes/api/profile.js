@@ -11,6 +11,7 @@ const User = require('../../models/User');
 // load validations
 const validateProfileInput = require('../../validations/profile');
 const validateExperienceInput = require('../../validations/experience');
+const validateEducationInput = require('../../validations/education');
 
 // @route   GET /api/profile/test
 // @desc    test profile route
@@ -173,6 +174,29 @@ router.post(
     Profile.findOne({ user: req.user.id })
       .then((profile) => {
         profile.experience.unshift(req.body);
+
+        profile.save()
+          .then((profile) => res.json(profile))
+          .catch((e) => res.status(400).json(e));
+      })
+      .catch((e) => res.status(400).json(e));
+  }
+);
+
+// @route   POST /api/profile/education
+// @desc    fill out 'Education' in the profile
+// @access  private
+router.post(
+  '/education',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateEducationInput(req.body);
+
+    if (!isValid) return res.status(400).json(errors);
+
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        profile.education.unshift(req.body);
 
         profile.save()
           .then((profile) => res.json(profile))
