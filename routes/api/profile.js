@@ -206,4 +206,26 @@ router.post(
   }
 );
 
+// @route   DELETE /api/profile/experience/:id
+// @desc    Delete experience from user's profile
+// @access  private
+router.delete(
+  '/experience/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        if (!profile) return res.status(404).json({
+          error: 'Profile not found!'
+        });
+
+        profile.experience = profile.experience
+          .filter((item) => item.id !== req.params.id);
+
+        profile.save().then((saved) => res.json(saved));
+      })
+      .catch((e) => res.status(400).json(e));
+  }
+);
+
 module.exports = router;
