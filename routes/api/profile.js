@@ -250,4 +250,21 @@ router.delete(
   }
 );
 
+// @route   DELETE /api/profile
+// @desc    Delete a user's account and profile completely
+// @access  private
+router.delete(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id })
+      .then(() => {
+        User.findOneAndRemove({ _id: req.user.id })
+          .then(() => res.json({ message: 'User and profile deleted' }))
+          .catch((e) => res.status(400).json(e));
+      })
+      .catch((e) => res.status(400).json(e));
+  }
+);
+
 module.exports = router;
