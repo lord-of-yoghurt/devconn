@@ -24,6 +24,7 @@ const PostSchema = new Schema({
       }
     }
   ],
+  // array of objects - no separate Comment model
   comments: [
     {
       user: {
