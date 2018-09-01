@@ -15,6 +15,16 @@ router.get('/test', (req, res) => {
   res.json({ test: 'testPost' });
 });
 
+// @route   GET /api/posts
+// @desc    return all posts
+// @access  private
+router.get('/', (req, res) => {
+  Post.find()
+    .sort({ date: -1 })
+    .then((posts) => res.json(posts))
+    .catch((e) => res.status(404));
+});
+
 // @route   POST /api/posts
 // @desc    receive post data and create new post
 // @access  private
