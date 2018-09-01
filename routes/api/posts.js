@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
   Post.find()
     .sort({ date: -1 })
     .then((posts) => res.json(posts))
-    .catch((e) => res.status(404));
+    .catch((e) => res.status(404).json({ error: 'No posts yet!' }));
 });
 
 // @route   GET /api/posts/:id
@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
 
       res.json(post);
     })
-    .catch((e) => res.status(400).json(e));
+    .catch((e) => res.status(400).json({ error: 'Invalid object ID' }));
 });
 
 // @route   POST /api/posts
