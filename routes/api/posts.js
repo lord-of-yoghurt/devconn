@@ -29,9 +29,15 @@ router.get('/', (req, res) => {
 // @desc    find post by id and return
 // @access  public
 router.get('/:id', (req, res) => {
-  Post.find()
-    .then((post) => res.json(post))
-    .catch((e) => res.status(404));
+  Post.findById({ _id: req.params.id })
+    .then((post) => {
+      if (!post) return res.status(400).json({
+        error: 'Post not found'
+      });
+
+      res.json(post);
+    })
+    .catch((e) => res.status(404).json(e));
 });
 
 // @route   POST /api/posts
