@@ -17,11 +17,20 @@ router.get('/test', (req, res) => {
 
 // @route   GET /api/posts
 // @desc    return all posts
-// @access  private
+// @access  public
 router.get('/', (req, res) => {
   Post.find()
     .sort({ date: -1 })
     .then((posts) => res.json(posts))
+    .catch((e) => res.status(404));
+});
+
+// @route   GET /api/posts/:id
+// @desc    find post by id and return
+// @access  public
+router.get('/:id', (req, res) => {
+  Post.find()
+    .then((post) => res.json(post))
     .catch((e) => res.status(404));
 });
 
