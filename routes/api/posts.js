@@ -6,6 +6,8 @@ const passport = require('passport');
 
 const Post = require('../../models/Post');
 
+const validatePostInput = require('../../validations/post');
+
 // @route   GET /api/posts/test
 // @desc    tests post route
 // @access  public
@@ -20,6 +22,10 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
+    const { errors, isEmpty } = validatePostInput(req.body);
+
+    if (!isValid) return res.status(400).json(errors);
+    
     const newPost = new Post({
       text: req.body.text,
       name: req.body.name,
