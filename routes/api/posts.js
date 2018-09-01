@@ -31,13 +31,13 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   Post.findById({ _id: req.params.id })
     .then((post) => {
-      if (!post) return res.status(400).json({
+      if (!post) return res.status(404).json({
         error: 'Post not found'
       });
 
       res.json(post);
     })
-    .catch((e) => res.status(404).json(e));
+    .catch((e) => res.status(400).json(e));
 });
 
 // @route   POST /api/posts
