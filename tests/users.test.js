@@ -2,7 +2,9 @@ const request = require('supertest');
 
 const app = require('../app');
 const User = require('../models/User');
+
 const { registerOpts, loginOpts } = require('./dummyData');
+let token;
 
 beforeAll((done) => {
   User.remove({}).then(() => done());
@@ -23,6 +25,23 @@ describe('User router', () => {
     request(app)
       .post('/api/users/register')
       .send(registerOpts)
-      .expect(200, done)
+      .expect(200)
+      .expect('Content-type', /json/)
+      .then((res) => {
+        expect(res.body.name).toEqual(registerOpts.name);
+        done();
+      });
+  });
+
+  it('logs user in and receives a token', (done) => {
+    request(app)
+      .post('/api/users/login')
+      .send(loginOpts)
+      .expect(200)
+      .then((res) => {
+        token = res.body.token;
+        expect(token).toBeTruthy();
+        done();
+      });
   });
 });
