@@ -33,6 +33,17 @@ describe('User router', () => {
       });
   });
 
+  it('returns an error when an email already exists', (done) => {
+    request(app)
+      .post('/api/users/register')
+      .send(registerOpts)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.email).toEqual('This email already exists!');
+        done();
+      });
+  });
+
   it('logs user in and receives a token', (done) => {
     request(app)
       .post('/api/users/login')
