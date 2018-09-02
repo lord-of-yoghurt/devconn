@@ -65,6 +65,36 @@ router.post(
   }
 );
 
+// @route   POST /api/posts/like/:id
+// @desc    like/unlike a post
+// @access  private
+router.post(
+  '/like/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then((post) => {
+        if (!post) return res.status(404).json({
+          error: 'Post not found'
+        });
+
+        const idx = post.likes.findIndex((value) => {
+          return value.user == req.user.id;
+        });
+
+        // index not found - no like from this user yet
+        if (idx === -1) {
+          post.likes.push({ user: req.user.id });
+        } else {
+          post.likes.splice(idx, 1);
+        }
+
+        post.save().then((saved) => res.json(saved));
+      })
+      .catch((e) => res.status(400).json({ error: 'Error :(' }));
+  }
+);
+
 // @route   DELETE /api/posts/:id
 // @desc    find post by id delete it
 // @access  private
