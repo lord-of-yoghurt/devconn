@@ -3,7 +3,13 @@ const request = require('supertest');
 const app = require('../app');
 const User = require('../models/User');
 
-const { registerOpts, loginOpts } = require('./dummyData');
+const { 
+  registerOpts, 
+  loginOpts,
+  wrongEmail,
+  wrongPassword
+} = require('./seeds');
+
 let token;
 
 beforeAll((done) => {
@@ -42,6 +48,13 @@ describe('User router', () => {
         expect(res.body.email).toEqual('This email already exists!');
         done();
       });
+  });
+
+  it('returns a login error if the user doesn\'t exist', (done) => {
+    request(app)
+      .post('/api/users/login')
+      .send(wrongEmail)
+      .expect(404, done);
   });
 
   it('logs user in and receives a token', (done) => {
