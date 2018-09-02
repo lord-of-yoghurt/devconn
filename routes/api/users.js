@@ -25,6 +25,10 @@ router.get('/test', (req, res) => {
   res.json({ test: 'testUser' });
 });
 
+router.post('/test', (req, res) => {
+  res.json(req.body);
+});
+
 // @route   GET /api/users/register
 // @desc    Register new user
 // @access  public

@@ -2,7 +2,7 @@ const request = require('supertest');
 
 const app = require('../app');
 
-describe('Test the root path', () => {
+describe('The root path', () => {
   it('Returns 200', (done) => {
     request(app).get('/')
       .then((response) => {
