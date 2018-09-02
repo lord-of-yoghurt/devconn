@@ -2,17 +2,11 @@ const request = require('supertest');
 
 const app = require('../app');
 const User = require('../models/User');
+const { registerOpts, loginOpts } = require('./dummyData');
 
 beforeAll((done) => {
   User.remove({}).then(() => done());
 });
-
-const registerOpts = {
-  email: 'test1@test.com',
-  password: '123456',
-  confPassword: '123456',
-  name: 'Test User'
-};
 
 describe('User router', () => {
   it('receives 200 from the test route', (done) => {
@@ -24,17 +18,6 @@ describe('User router', () => {
         done();
       });
   });
-
-  // it('works with post requests', (done) => {
-  //   request(app)
-  //     .post('/api/users/test')
-  //     .send({ message: 'oh hai' })
-  //     .expect(200)
-  //     .then((res) => {
-  //       expect(res.body.message).toEqual('oh hai');
-  //       done();
-  //     });
-  // });
 
   it('registers a new user successfully', (done) => {
     request(app)
