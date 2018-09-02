@@ -73,13 +73,13 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const errors = {};
-
-    Profile.findOne({ user: req.user.id })
+    
+    Profile.findById(req.user.id)
       .then((profile) => {
-        if (!profile) {
-          errors.noProfile = 'How are you even posting without a profile?..';
-          return res.status(404).json(errors);
-        }
+        // if (!profile) { // this doesn't work for some reason :(
+        //   errors.noProfile = 'How are you even posting without a profile?..';
+        //   return res.status(404).json(errors);
+        // }
 
         Post.findById(req.params.id)
           .then((post) => {
