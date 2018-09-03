@@ -9,10 +9,10 @@ exports.registerOpts = {
     name: 'Test User'
   },
   userTwo: {
-    email: 'test1@test.com',
-    password: '123456',
-    confPassword: '123456',
-    name: 'Test User'
+    email: 'test2@test.com',
+    password: '121212',
+    confPassword: '121212',
+    name: 'Some weird dude'
   }
 };
 
@@ -21,6 +21,10 @@ exports.loginOpts = {
   userOne: {
     email: 'test1@test.com',
     password: '123456'
+  },
+  userTwo: {
+    email: 'test2@test.com',
+    password: '121212'
   }
 };
 

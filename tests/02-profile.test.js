@@ -18,6 +18,7 @@ const LOGIN_URI   = '/api/users/login',
 beforeAll((done) => {
   Profile.remove({}).then(() => done());
 
+  // log a test user in
   seedDb(loginOpts.userOne, LOGIN_URI, app, (res) => {
     token = res.body.token;
     done();
@@ -48,7 +49,8 @@ describe('Profile router', () => {
       .then((res) => {
         // same id means it's the same profile
         expect(res.body._id).toEqual(profileId);
-        expect(res.body.handle).toEqual(profileOpts.handle);
+        // make sure the status is indeed updated
+        expect(res.body.status).toEqual('Supreme Tester');
         done();
       });
   });
