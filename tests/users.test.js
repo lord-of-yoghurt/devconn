@@ -68,6 +68,18 @@ describe('User router', () => {
   });
 
   describe('/api/users/login', () => {
+    it('returns errors when login validations fail', (done) => {
+      request(app)
+        .post('/api/users/login')
+        .send({})
+        .expect(400)
+        .then((res) => {
+          expect(res.body.email).toEqual('Email cannot be empty');
+          expect(res.body.password).toEqual('Password cannot be empty');
+          done();
+        });
+    });
+
     it('returns an error if the user doesn\'t exist', (done) => {
       request(app)
         .post('/api/users/login')
