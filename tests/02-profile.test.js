@@ -1,7 +1,6 @@
 const request = require('supertest');
 
 const app = require('../app');
-
 const Profile = require('../models/Profile');
 
 const {
@@ -26,6 +25,19 @@ beforeAll((done) => {
 });
 
 describe('Profile router', () => {
+  it('returns an error if user profile doesn\'t exist', (done) => {
+    request(app)
+      .get('/api/profile')
+      .set('Authorization', token)
+      .expect(404)
+      .then((res) => {
+        expect(res.body.noProfile).toEqual(
+          'Can\'t find a profile for this user!'
+        );
+        done();
+      });
+  });
+
   it('creates the user\'s profile correctly', (done) => {
     request(app)
       .post('/api/profile')
