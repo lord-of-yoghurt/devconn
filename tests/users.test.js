@@ -54,7 +54,22 @@ describe('User router', () => {
     request(app)
       .post('/api/users/login')
       .send(wrongEmail)
-      .expect(404, done);
+      .expect(404)
+      .then((res) => {
+        expect(res.body.email).toEqual('User not found!');
+        done();
+      });
+  });
+
+  it('returns a login error when password is wrong', (done) => {
+    request(app)
+      .post('/api/users/login')
+      .send(wrongPassword)
+      .expect(400)
+      .then((res) => {
+        expect(res.body.password).toEqual('Incorrect email or password');
+        done();
+      });
   });
 
   it('logs user in and receives a token', (done) => {
