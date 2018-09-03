@@ -16,19 +16,20 @@ const LOGIN_URI   = '/api/users/login',
       PROFILE_URI = '/api/profile';
 
 beforeAll((done) => {
-  Profile.remove({});
+  Profile.remove({}).then(() => done());
 
-  seedDb(loginOpts, LOGIN_URI, app, (res) => {
+  seedDb(loginOpts.userOne, LOGIN_URI, app, (res) => {
     token = res.body.token;
     done();
   });
 });
 
 describe('Profile router', () => {
-  it('logs user in', (done) => {
+  it('creates the user\'s profile correctly', (done) => {
     request(app)
-      .get('/api/users/current')
+      .post('/api/profile')
       .set('Authorization', token)
+      .send(profileOpts)
       .expect(200, done);
   });
 });

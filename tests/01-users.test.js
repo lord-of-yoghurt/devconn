@@ -24,11 +24,11 @@ describe('User router', () => {
     it('registers a new user successfully', (done) => {
       request(app)
         .post('/api/users/register')
-        .send(registerOpts)
+        .send(registerOpts.userOne)
         .expect(200)
         .expect('Content-type', /json/)
         .then((res) => {
-          expect(res.body.name).toEqual(registerOpts.name);
+          expect(res.body.name).toEqual(registerOpts.userOne.name);
           done();
         });
     });
@@ -48,7 +48,7 @@ describe('User router', () => {
     it('returns an error when an email already exists', (done) => {
       request(app)
         .post('/api/users/register')
-        .send(registerOpts)
+        .send(registerOpts.userOne)
         .expect(400)
         .then((res) => {
           expect(res.body.email).toEqual('This email already exists!');
@@ -95,7 +95,7 @@ describe('User router', () => {
     it('logs user in and receives a token', (done) => {
       request(app)
         .post('/api/users/login')
-        .send(loginOpts)
+        .send(loginOpts.userOne)
         .expect(200)
         .then((res) => {
           token = res.body.token;
