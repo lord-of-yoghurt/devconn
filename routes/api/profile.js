@@ -133,7 +133,7 @@ router.post(
     Profile.findOne({ user })
       .then((profile) => {
         // if the profile exists, this is an update!
-        if (profile && profile.user.id === user) {
+        if (profile && profile.user.toString() === user) {
           Profile.findOneAndUpdate(
             { user },
             { $set: profileFields },
