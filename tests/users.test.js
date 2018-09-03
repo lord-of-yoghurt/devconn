@@ -3,6 +3,7 @@ const request = require('supertest');
 const app = require('../app');
 const User = require('../models/User');
 
+// get dummy data to fill in fields
 const { 
   registerOpts, 
   loginOpts,
@@ -10,8 +11,10 @@ const {
   wrongPassword
 } = require('./seeds');
 
+// JWT token to be saved here upon login
 let token;
 
+// before running tests, drop the test db (User model only)
 beforeAll((done) => {
   User.remove({}).then(() => done());
 });
@@ -35,6 +38,18 @@ describe('User router', () => {
       .expect('Content-type', /json/)
       .then((res) => {
         expect(res.body.name).toEqual(registerOpts.name);
+        done();
+      });
+  });
+
+  it('returns errors when register validations fail', (done) => {
+    request(app)
+      .post('/api/users/register')
+      .send({})
+      .expect(400)
+      .then((res) => {
+        expect(res.body.name).toEqual('Name cannot be empty');
+        expect(res.body.email).toEqual('Email cannot be empty');
         done();
       });
   });
