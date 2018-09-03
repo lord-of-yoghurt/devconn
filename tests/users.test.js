@@ -20,7 +20,7 @@ beforeAll((done) => {
 });
 
 describe('User router', () => {
-  it('receives 200 from the test route', (done) => {
+  it('sends 200 from the test route', (done) => {
     request(app)
       .get('/api/users/test')
       .expect(200)
@@ -95,6 +95,25 @@ describe('User router', () => {
       .then((res) => {
         token = res.body.token;
         expect(token).toBeTruthy();
+        done();
+      });
+  });
+
+  it('returns Unauthorized with wrong token', (done) => {
+    request(app)
+      .get('/api/users/current')
+      .set('Authorization', 'notatoken')
+      .expect(401, done);
+  });
+
+  it('returns a User instance from /current when logged in', (done) => {
+    request(app)
+      .get('/api/users/current')
+      .set('Authorization', token)
+      .expect(200)
+      .expect('Content-type', /json/)
+      .then((res) => {
+        expect(res.body.name).toEqual('Test User');
         done();
       });
   });
