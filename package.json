@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "cross-env NODE_ENV=test jest --watch",
+    "test": "cross-env NODE_ENV=test jest -i --watch",
     "server": "nodemon server.js"
   },
   "author": "David Ordovskiy",

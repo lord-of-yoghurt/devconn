@@ -20,16 +20,6 @@ beforeAll((done) => {
 });
 
 describe('User router', () => {
-  it('sends 200 from the test route', (done) => {
-    request(app)
-      .get('/api/users/test')
-      .expect(200)
-      .then((res) => {
-        expect(res.body.test).toEqual('testUser');
-        done();
-      });
-  });
-
   describe('/api/users/register', () => {
     it('registers a new user successfully', (done) => {
       request(app)
