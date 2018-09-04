@@ -81,4 +81,23 @@ describe('Profile router', () => {
         .expect(200, done);
     });
   });
+
+  describe('/api/profile/handle/:handle', () => {
+    it('returns user profile data by handle', (done) => {
+      request(app)
+        .get(`/api/profile/handle/${profileOpts.profileOne.handle}`)
+        .expect('Content-type', /json/)
+        .expect(200, done);
+    });
+
+    it('returns error if profile doesn\'t exist', (done) => {
+      request(app)
+        .get('/api/profile/handle/nosuchhandle')
+        .expect(404)
+        .then((res) => {
+          expect(res.body.noProfile).toEqual('This profile does not exist');
+          done();
+        });
+    });
+  });
 });
