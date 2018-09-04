@@ -25,53 +25,55 @@ beforeAll((done) => {
 });
 
 describe('Profile router', () => {
-  it('returns an error if user profile doesn\'t exist', (done) => {
-    request(app)
-      .get('/api/profile')
-      .set('Authorization', token)
-      .expect(404)
-      .then((res) => {
-        expect(res.body.noProfile).toEqual(
-          'Can\'t find a profile for this user!'
-        );
-        done();
-      });
-  });
+  describe('/api/profile', () => {
+    it('returns an error if user profile doesn\'t exist', (done) => {
+      request(app)
+        .get('/api/profile')
+        .set('Authorization', token)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.noProfile).toEqual(
+            'Can\'t find a profile for this user!'
+          );
+          done();
+        });
+    });
 
-  it('creates the user\'s profile correctly', (done) => {
-    request(app)
-      .post('/api/profile')
-      .set('Authorization', token)
-      .send(profileOpts)
-      .expect(200)
-      .then((res) => {
-        profileId = res.body._id;
-        expect(res.body.handle).toEqual('testuser9000');
-        done();
-      });
-  });
+    it('creates the user\'s profile correctly', (done) => {
+      request(app)
+        .post('/api/profile')
+        .set('Authorization', token)
+        .send(profileOpts)
+        .expect(200)
+        .then((res) => {
+          profileId = res.body._id;
+          expect(res.body.handle).toEqual('testuser9000');
+          done();
+        });
+    });
 
-  it('updates profile if already exists', (done) => {
-    request(app)
-      .post('/api/profile')
-      .set('Authorization', token)
-      .send({ ...profileOpts, status: 'Supreme Tester' })
-      // 200 means no validation fails - i.e. profile is updated
-      .expect(200)
-      .then((res) => {
-        // same id means it's the same profile
-        expect(res.body._id).toEqual(profileId);
-        // make sure the status is indeed updated
-        expect(res.body.status).toEqual('Supreme Tester');
-        done();
-      });
-  });
+    it('updates profile if already exists', (done) => {
+      request(app)
+        .post('/api/profile')
+        .set('Authorization', token)
+        .send({ ...profileOpts, status: 'Supreme Tester' })
+        // 200 means no validation fails - i.e. profile is updated
+        .expect(200)
+        .then((res) => {
+          // same id means it's the same profile
+          expect(res.body._id).toEqual(profileId);
+          // make sure the status is indeed updated
+          expect(res.body.status).toEqual('Supreme Tester');
+          done();
+        });
+    });
 
-  it('returns user\'s profile after creating it', (done) => {
-    request(app)
-      .get('/api/profile')
-      .set('Authorization', token)
-      .expect('Content-type', /json/)
-      .expect(200, done);
+    it('returns user\'s profile after creating it', (done) => {
+      request(app)
+        .get('/api/profile')
+        .set('Authorization', token)
+        .expect('Content-type', /json/)
+        .expect(200, done);
+    });
   });
 });
