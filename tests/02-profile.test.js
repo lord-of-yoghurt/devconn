@@ -50,6 +50,8 @@ describe('Profile router', () => {
         .send(profileOpts.profileOne)
         .expect(200)
         .then((res) => {
+          // save profile id and corresponding user id
+          // for later tests
           profileId = res.body._id;
           userId = res.body.user.toString();
           expect(res.body.handle).toEqual('testuser9000');
@@ -73,7 +75,7 @@ describe('Profile router', () => {
         });
     });
 
-    it('returns user\'s profile after creating it', (done) => {
+    it('returns user\'s profile via GET request, if exists', (done) => {
       request(app)
         .get('/api/profile')
         .set('Authorization', token)
@@ -82,6 +84,9 @@ describe('Profile router', () => {
     });
   });
 
+  /*
+   * GET /api/profile/handle/:handle
+   */
   describe('/api/profile/handle/:handle', () => {
     it('returns user profile data by handle', (done) => {
       request(app)
@@ -93,6 +98,28 @@ describe('Profile router', () => {
     it('returns error if profile doesn\'t exist', (done) => {
       request(app)
         .get('/api/profile/handle/nosuchhandle')
+        .expect(404)
+        .then((res) => {
+          expect(res.body.noProfile).toEqual('This profile does not exist');
+          done();
+        });
+    });
+  });
+
+  /*
+   * GET /api/profile/user/:id
+   */
+  describe('/api/profile/user/:id', () => {
+    it('returns existing user profile by its user ID', (done) => {
+      request(app)
+        .get(`/api/profile/user/${userId}`)
+        .expect('Content-type', /json/)
+        .expect(200, done);
+    });
+
+    it('returns error if profile doesn\'t exist', (done) => {
+      request(app)
+        .get('/api/profile/user/5b8cfd75e695d0a5845ea2c7')
         .expect(404)
         .then((res) => {
           expect(res.body.noProfile).toEqual('This profile does not exist');
