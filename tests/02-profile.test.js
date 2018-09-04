@@ -66,4 +66,12 @@ describe('Profile router', () => {
         done();
       });
   });
+
+  it('returns user\'s profile after creating it', (done) => {
+    request(app)
+      .get('/api/profile')
+      .set('Authorization', token)
+      .expect('Content-type', /json/)
+      .expect(200, done);
+  });
 });
