@@ -9,7 +9,7 @@ const {
   seedDb
 } = require('./seeds');
 
-let token, profileId;
+let token, profileId, userId;
 
 const LOGIN_URI   = '/api/users/login',
       PROFILE_URI = '/api/profile';
@@ -25,6 +25,10 @@ beforeAll((done) => {
 });
 
 describe('Profile router', () => {
+
+  /*
+   * GET and POST /api/profile
+   */ 
   describe('/api/profile', () => {
     it('returns an error if user profile doesn\'t exist', (done) => {
       request(app)
@@ -43,10 +47,11 @@ describe('Profile router', () => {
       request(app)
         .post('/api/profile')
         .set('Authorization', token)
-        .send(profileOpts)
+        .send(profileOpts.profileOne)
         .expect(200)
         .then((res) => {
           profileId = res.body._id;
+          userId = res.body.user.toString();
           expect(res.body.handle).toEqual('testuser9000');
           done();
         });
@@ -56,7 +61,7 @@ describe('Profile router', () => {
       request(app)
         .post('/api/profile')
         .set('Authorization', token)
-        .send({ ...profileOpts, status: 'Supreme Tester' })
+        .send({ ...profileOpts.profileOne, status: 'Supreme Tester' })
         // 200 means no validation fails - i.e. profile is updated
         .expect(200)
         .then((res) => {

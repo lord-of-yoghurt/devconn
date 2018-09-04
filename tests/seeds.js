@@ -41,11 +41,19 @@ exports.wrongPassword = {
 };
 
 exports.profileOpts = {
-  handle: 'testuser9000',
-  status: 'Master Tester',
-  skills: 'RSpec, Jest, Mocha, Chai',
-  website: 'http://testingrocks.ee',
-  youtube: 'http://youtube.com/users/itesteverything'
+  profileOne: {
+    handle: 'testuser9000',
+    status: 'Master Tester',
+    skills: 'RSpec, Jest, Mocha, Chai',
+    website: 'http://testingrocks.ee',
+    youtube: 'http://youtube.com/users/itesteverything'
+  },
+  profileTwo: {
+    handle: 'testallday',
+    status: 'Testing Apprentice',
+    skills: 'Postman',
+    instagram: 'http://instagram.com/borntotest'
+  }
 };
 
 exports.seedDb = (userData, url, app, callback) => {
