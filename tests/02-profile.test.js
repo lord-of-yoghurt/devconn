@@ -54,6 +54,20 @@ describe('Profile router', () => {
    * GET and POST /api/profile
    */ 
   describe('/api/profile', () => {
+    it('returns errors for failed validations', (done) => {
+      request(app)
+        .post('/api/profile')
+        .set('Authorization', token)
+        .send({})
+        .expect(400)
+        .then((res) => {
+          expect(res.body.handle).toEqual('Handle is required');
+          expect(res.body.status).toEqual('Status is required');
+          expect(res.body.skills).toEqual('Please add at least one skill');
+          done();
+        });
+    });
+
     it('creates the user\'s profile correctly', (done) => {
       request(app)
         .post('/api/profile')
