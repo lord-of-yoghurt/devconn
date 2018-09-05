@@ -52,7 +52,7 @@ router.get('/all', (req, res) => {
     .populate('user', ['name', 'avatar'])
     .then((profiles) => {
       if (!profiles) {
-        errors.noProfiles = 'Could not fetch profiles.';
+        errors.noProfiles = 'No profiles added yet!';
         return res.status(404).json(errors);
       }
       res.json(profiles);
