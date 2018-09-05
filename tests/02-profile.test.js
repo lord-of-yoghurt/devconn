@@ -25,11 +25,17 @@ beforeAll((done) => {
 });
 
 describe('Profile router', () => {
+  describe('various /api/profile errors', () => {
+    it('returns an error if no profiles exist for /all', (done) => {
+      request(app)
+        .get('/api/profile/all')
+        .expect(404)
+        .then((res) => {
+          expect(res.body.noProfiles).toEqual('No profiles added yet!');
+          done();
+        });
+    });
 
-  /*
-   * GET and POST /api/profile
-   */ 
-  describe('/api/profile', () => {
     it('returns an error if user profile doesn\'t exist', (done) => {
       request(app)
         .get('/api/profile')
@@ -42,7 +48,12 @@ describe('Profile router', () => {
           done();
         });
     });
+  });
 
+  /*
+   * GET and POST /api/profile
+   */ 
+  describe('/api/profile', () => {
     it('creates the user\'s profile correctly', (done) => {
       request(app)
         .post('/api/profile')
