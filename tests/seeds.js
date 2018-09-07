@@ -56,6 +56,14 @@ exports.profileOpts = {
   }
 };
 
+exports.experience = {
+  title: 'Tester Protegee',
+  company: 'Testing Unlimited, Inc.',
+  from: '2005-11-27',
+  to: '2006-11-26',
+  description: 'Test, test, test!'
+};
+
 exports.seedDb = (userData, url, app, callback) => {
   request(app)
     .post(url)

@@ -153,6 +153,9 @@ describe('Profile router', () => {
     });
   });
 
+  /*
+   * POST /api/profile/experience
+   */
   describe('/api/profile/experience', () => {
     it('returns errors for failed validations', (done) => {
       request(app)
