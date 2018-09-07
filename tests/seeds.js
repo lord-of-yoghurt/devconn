@@ -56,7 +56,7 @@ exports.profileOpts = {
   }
 };
 
-exports.experience = {
+exports.expOpts = {
   title: 'Tester Protegee',
   company: 'Testing Unlimited, Inc.',
   from: '2005-11-27',

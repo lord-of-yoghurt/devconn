@@ -6,7 +6,8 @@ const Profile = require('../models/Profile');
 const {
   loginOpts,
   profileOpts,
-  seedDb
+  seedDb,
+  expOpts
 } = require('./seeds');
 
 let token, profileId, userId;
@@ -167,6 +168,24 @@ describe('Profile router', () => {
           expect(res.body.title).toEqual('Job title is required');
           expect(res.body.company).toEqual('Company field is required');
           expect(res.body.from).toEqual('Please provide the start date');
+          done();
+        });
+    });
+
+    it('adds experience to a user\'s profile correctly', (done) => {
+      request(app)
+        .post('/api/profile/experience')
+        .set('Authorization', token)
+        .send(expOpts)
+        .expect('Content-type', /json/)
+        .expect(200)
+        .then((res) => {
+          expect(res.body.user).toEqual(userId);
+          
+          const { experience } = res.body;
+
+          expect(experience.length).toEqual(1);
+          expect(experience[0].title).toEqual(expOpts.title);
           done();
         });
     });
