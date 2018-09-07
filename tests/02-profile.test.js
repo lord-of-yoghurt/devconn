@@ -152,4 +152,20 @@ describe('Profile router', () => {
         });
     });
   });
+
+  describe('/api/profile/experience', () => {
+    it('returns errors for failed validations', (done) => {
+      request(app)
+        .post('/api/profile/experience')
+        .set('Authorization', token)
+        .send({})
+        .expect(400)
+        .then((res) => {
+          expect(res.body.title).toEqual('Job title is required');
+          expect(res.body.company).toEqual('Company field is required');
+          expect(res.body.from).toEqual('Please provide the start date');
+          done();
+        });
+    });
+  });
 });
