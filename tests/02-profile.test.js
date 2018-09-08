@@ -181,11 +181,30 @@ describe('Profile router', () => {
         .expect(200)
         .then((res) => {
           expect(res.body.user).toEqual(userId);
-          
+
           const { experience } = res.body;
 
           expect(experience.length).toEqual(1);
           expect(experience[0].title).toEqual(expOpts.title);
+          done();
+        });
+    });
+  });
+
+  /*
+   * POST /api/profile/education
+   */
+  describe('/api/profile/education', () => {
+    it('returns errors for failed validations', (done) => {
+      request(app)
+        .post('/api/profile/education')
+        .set('Authorization', token)
+        .send({})
+        .expect(400)
+        .then((res) => {
+          expect(res.body.school).toEqual('School is required');
+          expect(res.body.degree).toEqual('Degree is required');
+          expect(res.body.from).toEqual('Please provide the start date');
           done();
         });
     });
