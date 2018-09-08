@@ -64,6 +64,14 @@ exports.expOpts = {
   description: 'Test, test, test!'
 };
 
+exports.eduOpts = {
+  school: 'NYU School of Testing',
+  degree: 'Bachelor of Testing, Master of Testing',
+  fieldOfStudy: 'Agriculture',
+  from: '2007-01-01',
+  current: true
+};
+
 exports.seedDb = (userData, url, app, callback) => {
   request(app)
     .post(url)
