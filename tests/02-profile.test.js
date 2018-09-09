@@ -7,7 +7,8 @@ const {
   loginOpts,
   profileOpts,
   seedDb,
-  expOpts
+  expOpts,
+  eduOpts
 } = require('./seeds');
 
 let token, profileId, userId;
@@ -207,6 +208,15 @@ describe('Profile router', () => {
           expect(res.body.from).toEqual('Please provide the start date');
           done();
         });
+    });
+
+    it('adds education to user\'s profile correctly', (done) => {
+      request(app)
+        .post('/api/profile/education')
+        .set('Authorization', token)
+        .send(eduOpts)
+        .expect('Content-type', /json/)
+        .expect(200, done);
     });
   });
 });
