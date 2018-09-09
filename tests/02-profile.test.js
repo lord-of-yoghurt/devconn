@@ -242,5 +242,12 @@ describe('Profile router', () => {
         .set('Authorization', token)
         .expect(200, done);
     });
+
+    it('deletes education from user\'s profile', (done) => {
+      request(app)
+        .delete(`/api/profile/education/${eduId}`)
+        .set('Authorization', token)
+        .expect(200, done);
+    });
   });
 });
