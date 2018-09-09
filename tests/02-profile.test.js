@@ -216,7 +216,16 @@ describe('Profile router', () => {
         .set('Authorization', token)
         .send(eduOpts)
         .expect('Content-type', /json/)
-        .expect(200, done);
+        .expect(200)
+        .then((res) => {
+          expect(res.body.user).toEqual(userId);
+
+          const { education } = res.body;
+
+          expect(education.length).toEqual(1);
+          expect(education[0].school).toEqual(eduOpts.school);
+          done();
+        });
     });
   });
 });
