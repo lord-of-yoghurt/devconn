@@ -40,6 +40,7 @@ exports.wrongPassword = {
   password: '654321'
 };
 
+// two user profiles
 exports.profileOpts = {
   profileOne: {
     handle: 'testuser9000',
@@ -56,6 +57,7 @@ exports.profileOpts = {
   }
 };
 
+// experience data
 exports.expOpts = {
   title: 'Tester Protegee',
   company: 'Testing Unlimited, Inc.',
@@ -64,6 +66,7 @@ exports.expOpts = {
   description: 'Test, test, test!'
 };
 
+// education data
 exports.eduOpts = {
   school: 'NYU School of Testing',
   degree: 'Bachelor of Testing, Master of Testing',
@@ -72,9 +75,11 @@ exports.eduOpts = {
   current: true
 };
 
-exports.seedDb = (userData, url, app, callback) => {
+// generic function to send some data to the api
+// before running tests
+exports.seedDb = (data, url, app, callback) => {
   request(app)
     .post(url)
-    .send(userData)
+    .send(data)
     .then((res) => callback(res));
 };

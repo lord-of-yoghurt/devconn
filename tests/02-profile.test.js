@@ -11,7 +11,7 @@ const {
   eduOpts
 } = require('./seeds');
 
-let token, profileId, userId;
+let token, profileId, userId, expId, eduId;
 
 const LOGIN_URI   = '/api/users/login',
       PROFILE_URI = '/api/profile';
@@ -184,6 +184,7 @@ describe('Profile router', () => {
           expect(res.body.user).toEqual(userId);
 
           const { experience } = res.body;
+          expId = experience[0]._id.toString();
 
           expect(experience.length).toEqual(1);
           expect(experience[0].title).toEqual(expOpts.title);
@@ -221,11 +222,25 @@ describe('Profile router', () => {
           expect(res.body.user).toEqual(userId);
 
           const { education } = res.body;
+          eduId = education[0]._id.toString();
 
           expect(education.length).toEqual(1);
           expect(education[0].school).toEqual(eduOpts.school);
           done();
         });
+    });
+  });
+
+  /*
+   * DELETE /api/profile/experience/:id
+   * DELETE /api/profile/education/:id
+   */
+  describe('DELETE experience and education routes', () => {
+    it('deletes experience from user\'s profile', (done) => {
+      request(app)
+        .delete(`/api/profile/experience/${expId}`)
+        .set('Authorization', token)
+        .expect(200, done);
     });
   });
 });
