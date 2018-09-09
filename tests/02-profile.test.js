@@ -240,14 +240,33 @@ describe('Profile router', () => {
       request(app)
         .delete(`/api/profile/experience/${expId}`)
         .set('Authorization', token)
-        .expect(200, done);
+        .expect(200)
+        .then(() => {
+          // make sure experience was indeed deleted (length is 0)
+          request(app)
+            .get(`/api/profile/user/${userId}`)
+            .then((res) => {
+              expect(res.body.experience.length).toEqual(0);
+              done();
+            });
+          done();
+        });
     });
 
     it('deletes education from user\'s profile', (done) => {
       request(app)
         .delete(`/api/profile/education/${eduId}`)
         .set('Authorization', token)
-        .expect(200, done);
+        .expect(200)
+        .then(() => {
+          request(app)
+            .get(`/api/profile/user/${userId}`)
+            .then((res) => {
+              expect(res.body.education.length).toEqual(0);
+              done();
+            });
+          done();
+        });
     });
   });
 });
