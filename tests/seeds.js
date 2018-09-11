@@ -77,9 +77,10 @@ exports.eduOpts = {
 
 // generic function to send some data to the api
 // before running tests
-exports.seedDb = (data, url, app, callback) => {
+exports.seedDb = (data, url, app, token = '', callback) => {
   request(app)
     .post(url)
+    .set('Authorization', token)
     .send(data)
     .then((res) => callback(res));
 };
