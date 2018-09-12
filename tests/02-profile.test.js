@@ -13,8 +13,7 @@ const {
 
 let token, profileId, userId, expId, eduId;
 
-const LOGIN_URI   = '/api/users/login',
-      PROFILE_URI = '/api/profile';
+const LOGIN_URI   = '/api/users/login';
 
 beforeAll((done) => {
   Profile.remove({}).then(() => done());
@@ -267,6 +266,24 @@ describe('Profile router', () => {
             });
           done();
         });
+    });
+  });
+
+  describe('DELETE account route', () => {
+    it('deletes user\'s profile and account correctly', (done) => {
+      request(app)
+        .delete('/api/profile')
+        .set('Authorization', token)
+        .expect(200)
+        .then(() => {
+          request(app)
+            .get('/api/profile/all')
+            .then((res) => {
+              expect(res.body.length).toEqual(0);
+              done();
+            });
+        });
+        done();
     });
   });
 });
