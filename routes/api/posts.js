@@ -134,4 +134,36 @@ router.delete(
   }
 );
 
+// @route   POST /api/posts/comment/:id << the id of the post
+// @desc    add comment to post
+// @access  private
+router.post(
+  '/comment/:id',
+  passport.authenticate('jwt', { session: false },
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then((post) => {
+        if (!post) return res.status(404).send({
+          notFound: 'Post not found!'
+        });
+
+        // create new comment object
+        const { text, name, avatar } = req.body,
+              newComment = {
+                text,
+                name,
+                avatar,
+                user: req.user.id
+              };
+
+        // add to the post's comments array
+        post.comments.unshift(newComment);
+
+        // then save the post
+        post.save().then((saved) => res.json(saved));
+      })
+      .catch((e) => res.status(404).send(e));
+  })  
+);
+
 module.exports = router;
