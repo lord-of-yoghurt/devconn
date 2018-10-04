@@ -13,7 +13,7 @@ const {
 
 let token, profileId, userId, expId, eduId;
 
-const LOGIN_URI   = '/api/users/login';
+const LOGIN_URI = '/api/users/login';
 
 beforeAll((done) => {
   Profile.remove({}).then(() => done());
@@ -283,7 +283,7 @@ describe('Profile router', () => {
               done();
             });
         });
-        done();
+      done();
     });
   });
 });
