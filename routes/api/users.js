@@ -37,7 +37,7 @@ router.post('/register', (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (user) {
-        errors.email = 'This email already exists!'
+        errors.email = 'This email already exists!';
         return res.status(400).json(errors);
       }
       
@@ -45,7 +45,7 @@ router.post('/register', (req, res) => {
         s: '200', // Avatar size
         r: 'pg', // Rating
         d: 'mm' // Default 
-      })
+      });
 
       const newUser = new User({
         name: req.body.name,

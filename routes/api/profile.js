@@ -51,8 +51,8 @@ router.get('/all', (req, res) => {
   Profile.find()
     .populate('user', ['name', 'avatar'])
     .then((profiles) => {
-      if (!profiles) {
-        errors.noProfiles = 'Could not fetch profiles.';
+      if (profiles.length === 0) {
+        errors.noProfiles = 'No profiles added yet!';
         return res.status(404).json(errors);
       }
       res.json(profiles);
@@ -133,7 +133,7 @@ router.post(
     Profile.findOne({ user })
       .then((profile) => {
         // if the profile exists, this is an update!
-        if (profile && profile.user.id === user) {
+        if (profile && profile.user.toString() === user) {
           Profile.findOneAndUpdate(
             { user },
             { $set: profileFields },

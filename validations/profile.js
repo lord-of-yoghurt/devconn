@@ -34,7 +34,7 @@ module.exports = (data) => {
   }
 
   if (Validator.isEmpty(skills)) {
-    errors.skills = 'You do have skills, right?';
+    errors.skills = 'Please add at least one skill';
   }
 
   for (let link in links) {
