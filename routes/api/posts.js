@@ -139,13 +139,19 @@ router.delete(
 // @access  private
 router.post(
   '/comment/:id',
-  passport.authenticate('jwt', { session: false },
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    if (!isValid) return res.status(400).json(errors);
+    
     Post.findById(req.params.id)
       .then((post) => {
-        if (!post) return res.status(404).send({
-          notFound: 'Post not found!'
-        });
+        if (!post) {
+          errors.notFound = 'Post not found';
+
+          res.status(404).json(errors);
+        }
 
         // create new comment object
         const { text, name, avatar } = req.body,
@@ -163,7 +169,7 @@ router.post(
         post.save().then((saved) => res.json(saved));
       })
       .catch((e) => res.status(404).send(e));
-  })  
+  }  
 );
 
 module.exports = router;
