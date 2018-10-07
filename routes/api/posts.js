@@ -172,4 +172,42 @@ router.post(
   }  
 );
 
+// @route   DELETE /api/posts/comment/:id/:comment_id
+// @desc    remove comment from post
+// @access  private
+router.post(
+  '/comment/:id/:cid',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const errors = {};
+
+    Post.findById(req.params.id)
+      .then((post) => {
+        if (!post) {
+          errors.postNotFound = 'Post not found';
+
+          res.status(404).json(errors);
+        }
+
+        // check if comment exists
+        const comments = post.comments.filter((comment) => {
+          return comment._id.toString() === req.params.cid;
+        });
+
+        if (comments.length === 0) {
+          errors.commentNotFound = 'Comment not found';
+
+          res.status(404).json(errors);
+        }
+
+        post.comments = post.comments.filter((comment) => {
+          return comment._id.toString() !== req.params.cid;
+        });
+
+        post.save().then((saved) => res.json(saved));
+      })
+      .catch((e) => res.status(404).send(e));
+  }
+);
+
 module.exports = router;
