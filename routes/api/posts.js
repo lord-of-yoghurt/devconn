@@ -175,7 +175,7 @@ router.post(
 // @route   DELETE /api/posts/comment/:id/:comment_id
 // @desc    remove comment from post
 // @access  private
-router.post(
+router.delete(
   '/comment/:id/:cid',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
@@ -200,6 +200,8 @@ router.post(
           res.status(404).json(errors);
         }
 
+        // remove comment by grabbing all comments whose id
+        // does NOT match the id of the one we're deleting
         post.comments = post.comments.filter((comment) => {
           return comment._id.toString() !== req.params.cid;
         });
