@@ -200,6 +200,13 @@ router.delete(
           res.status(404).json(errors);
         }
 
+        // should not be able to delete other people's comments
+        if (comments[0].user !== req.user._id) {
+          errors.notOwnComment = 'Cannot delete someone else\'s comment';
+
+          res.status(400).json(errors);
+        }
+
         // remove comment by grabbing all comments whose id
         // does NOT match the id of the one we're deleting
         post.comments = post.comments.filter((comment) => {
